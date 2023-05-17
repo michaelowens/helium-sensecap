@@ -21,6 +21,7 @@ services:
       - miner-storage:/var/data
       - dbus:/session/dbus
       - nebra:/var/nebra
+      - thix:/var/thix
     labels:
       io.balena.features.sysfs: 1
       io.balena.features.kernel-modules: 1
@@ -36,6 +37,7 @@ services:
     volumes:
       - pktfwdr:/var/pktfwd
       - nebra:/var/nebra
+      - thix:/var/thix
     environment:
       - FIRMWARE_VERSION=v1.0.2-14
       - FIRMWARE_SHORT_HASH=f97cd6b
@@ -53,6 +55,7 @@ services:
       io.balena.features.procfs: 1
     volumes:
       - nebra:/var/nebra
+      - thix:/var/thix
     environment:
       - FIRMWARE_VERSION=v1.0.2-14
       - FIRMWARE_SHORT_HASH=f97cd6b
@@ -68,7 +71,7 @@ services:
     privileged: true
     restart: always
     expose:
-      - "1680"
+      #- "1680"
       - "4467"
     ports:
       - "44158:44158/tcp"
@@ -79,6 +82,20 @@ services:
       - pktfwdr:/var/pktfwd
       - miner-storage:/var/data
       - nebra:/var/nebra
+      
+  thix-forwarder:
+    image: ghcr.io/thingsixfoundation/packet-handling/forwarder:1.0.8-beta.1
+    command: --default_frequency_plan=EU868
+    depends_on:
+      - diagnostics
+    cap_add:
+      - SYS_RAWIO
+    privileged: true
+    restart: always
+    expose:
+      - "1680"
+    volumes:
+      - thix:/etc/thingsix-forwarder
 
   diagnostics:
     image: ghcr.io/michaelowens/hm-diag:arm64-latest
@@ -94,6 +111,7 @@ services:
       - miner-storage:/var/data
       - watchdog-log:/var/watchdog
       - nebra:/var/nebra
+      - thix:/var/thix
     ports:
       - "80:80"
     cap_add:
@@ -123,3 +141,4 @@ volumes:
   dbus:
   nebra:
   watchdog-log:
+  thix:
