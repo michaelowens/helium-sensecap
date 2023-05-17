@@ -81,7 +81,7 @@ services:
       - nebra:/var/nebra
 
   diagnostics:
-    image: nebraltd/hm-diag:arm64-2959130
+    image: ghcr.io/michaelowens/hm-diag:arm64-latest
     depends_on:
       - dbus-session
     environment:
