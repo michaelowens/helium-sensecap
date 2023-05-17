@@ -85,7 +85,7 @@ services:
       
   thix-forwarder:
     image: ghcr.io/thingsixfoundation/packet-handling/forwarder:1.0.8-beta.1
-    command: --default_frequency_plan=EU868
+    command: --default_frequency_plan=EU868 --net=test
     depends_on:
       - diagnostics
     cap_add:
